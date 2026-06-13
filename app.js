@@ -624,7 +624,7 @@ function openShow(phrase) {
       <span>${escapeHTML(phrase.pronunciation)}</span>
       <div class="show-actions">
         <button class="tool-button primary" type="button" data-action="speak" data-id="${phrase.id}"><span aria-hidden="true">▶</span><span>재생</span></button>
-        <button class="tool-button" type="button" data-action="repeat" data-id="${phrase.id}"><span aria-hidden="true">↺</span><span>반복</span></button>
+        <button class="tool-button show-secondary" type="button" data-action="repeat" data-id="${phrase.id}"><span aria-hidden="true">↺</span><span>반복 재생</span></button>
       </div>
     </div>
   `;

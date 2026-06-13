@@ -624,6 +624,12 @@ dialog::backdrop {
   min-height: 54px;
 }
 
+.show-actions .show-secondary {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
 .toast {
   position: fixed;
   right: 16px;
