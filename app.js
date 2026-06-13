@@ -618,10 +618,12 @@ function openShow(phrase) {
   addRecent(phrase.id);
   if (els.detailDialog.open) els.detailDialog.close();
   els.showContent.innerHTML = `
-    <div class="show-ja" lang="ja">${escapeHTML(phrase.ja)}</div>
-    <div class="show-meta">
-      <strong>${escapeHTML(phrase.ko)}</strong>
-      <span>${escapeHTML(phrase.pronunciation)}</span>
+    <div class="show-main">
+      <div class="show-ja" lang="ja">${escapeHTML(phrase.ja)}</div>
+      <div class="show-ko">${escapeHTML(phrase.ko)}</div>
+      <div class="show-pronunciation">${escapeHTML(phrase.pronunciation)}</div>
+    </div>
+    <div class="show-footer">
       <div class="show-actions">
         <button class="tool-button primary" type="button" data-action="speak" data-id="${phrase.id}"><span aria-hidden="true">▶</span><span>재생</span></button>
         <button class="tool-button show-secondary" type="button" data-action="repeat" data-id="${phrase.id}"><span aria-hidden="true">↺</span><span>반복 재생</span></button>

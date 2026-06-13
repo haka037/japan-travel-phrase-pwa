@@ -583,34 +583,43 @@ dialog::backdrop {
   display: grid;
   min-height: 100svh;
   grid-template-rows: 1fr auto;
-  gap: 20px;
+  gap: 22px;
   padding: calc(54px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));
 }
 
-.show-ja {
+.show-main {
   align-self: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-  font-size: clamp(3rem, 14vw, 8rem);
-  font-weight: 950;
-  line-height: 1.12;
+  display: grid;
+  gap: 18px;
   text-align: center;
 }
 
-.show-meta {
+.show-ja {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  font-size: clamp(2.6rem, 13vw, 7.4rem);
+  font-weight: 950;
+  line-height: 1.12;
+}
+
+.show-ko {
+  color: white;
+  font-size: clamp(2rem, 7.2vw, 4.2rem);
+  font-weight: 950;
+  line-height: 1.18;
+}
+
+.show-pronunciation {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: clamp(1.55rem, 5.4vw, 3rem);
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.show-footer {
   display: grid;
   gap: 8px;
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.show-meta strong {
-  font-size: 1.05rem;
-  line-height: 1.35;
-}
-
-.show-meta span {
-  color: rgba(255, 255, 255, 0.78);
-  line-height: 1.35;
 }
 
 .show-actions {
