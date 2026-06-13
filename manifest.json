@@ -1,7 +1,7 @@
 {
-  "name": "일본 여행 회화",
+  "name": "일본 생활/여행 회화",
   "short_name": "일본회화",
-  "description": "한국인이 일본 여행 중 오프라인으로 쓰는 일본어 회화 PWA",
+  "description": "한국인이 일본 생활과 여행 중 오프라인으로 쓰는 일본어 회화 PWA",
   "lang": "ko",
   "dir": "ltr",
   "start_url": "./index.html",
@@ -10,7 +10,7 @@
   "orientation": "portrait",
   "background_color": "#f7f8f5",
   "theme_color": "#f7f8f5",
-  "categories": ["travel", "education", "utilities"],
+  "categories": ["travel", "education", "utilities", "lifestyle"],
   "icons": [
     {
       "src": "./icons/icon.svg",
