@@ -417,6 +417,7 @@ async function boot() {
   renderSuggestions();
   updateOnlineStatus();
   refreshVoices();
+  showUpdateToastIfNeeded();
 
   try {
     const response = await fetch("./phrases.json");
@@ -632,7 +633,7 @@ function renderCategories() {
 }
 
 function renderPhraseResults() {
-  let title = "여행 중 바로 쓰기";
+  let title = "생활/여행 바로 쓰기";
   let kicker = "추천";
   let phrases = [];
 
@@ -679,7 +680,7 @@ function renderPhraseResults() {
     if (state.query.trim()) {
       els.emptyState.innerHTML = `
         <strong>바로 만들 수 있는 문장을 찾지 못했습니다.</strong>
-        <span>예: "화장실 어디", "충전기 있나요", "신주쿠역 가고 싶어요", "여권 잃어버렸어요"처럼 짧게 써 보세요.</span>
+        <span>예: "화장실 어디", "재류카드 갱신", "계좌 만들고 싶어요", "대형 쓰레기 버리는 날"처럼 짧게 써 보세요.</span>
       `;
     } else {
       els.emptyState.innerHTML = `
@@ -1493,11 +1494,28 @@ function updateOnlineStatus() {
 
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").then(updateOnlineStatus).catch(() => {
-      els.offlineBadge.textContent = "캐시 확인 필요";
-    });
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController || sessionStorage.getItem("jpTravelPwaUpdateReloaded")) return;
+    sessionStorage.setItem("jpTravelPwaUpdateReloaded", "1");
+    window.location.reload();
   });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then((registration) => {
+        updateOnlineStatus();
+        registration.update?.();
+      })
+      .catch(() => {
+        els.offlineBadge.textContent = "캐시 확인 필요";
+      });
+  });
+}
+
+function showUpdateToastIfNeeded() {
+  if (!sessionStorage.getItem("jpTravelPwaUpdateReloaded")) return;
+  sessionStorage.removeItem("jpTravelPwaUpdateReloaded");
+  window.setTimeout(() => showToast("최신 오프라인 문장으로 업데이트했습니다."), 300);
 }
 
 function readJSON(key, fallback) {

@@ -1,4 +1,4 @@
-const CACHE_NAME = "japan-travel-phrase-pwa-v10";
+const CACHE_NAME = "japan-travel-phrase-pwa-v11";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -23,8 +23,16 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
-      .then(() => self.clients.claim())
+      .then((keys) => {
+        const oldKeys = keys.filter((key) => key !== CACHE_NAME);
+        return Promise.all(oldKeys.map((key) => caches.delete(key)))
+          .then(() => self.clients.claim())
+          .then(() => {
+            if (!oldKeys.length) return undefined;
+            return self.clients.matchAll({ type: "window", includeUncontrolled: true })
+              .then((windows) => Promise.all(windows.map((client) => client.navigate(client.url))));
+          });
+      })
   );
 });
 
