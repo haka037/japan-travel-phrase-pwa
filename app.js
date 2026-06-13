@@ -3,6 +3,7 @@ const STORAGE_KEYS = {
   recent: "jpTravelPhraseRecent.v1",
   settings: "jpTravelPhraseSettings.v1",
 };
+const DATA_CACHE_NAME = "japan-travel-phrase-pwa-data-v12";
 
 const QUICK_PHRASES = [
   "화장실은 어디에 있나요?",
@@ -422,10 +423,12 @@ async function boot() {
   try {
     const response = await fetch("./phrases.json");
     if (!response.ok) throw new Error(`phrases.json ${response.status}`);
+    const cacheCopy = response.clone();
     state.data = await response.json();
     state.phrases = state.data.phrases;
     state.categories = state.data.categories;
     state.phraseById = new Map(state.phrases.map((phrase) => [phrase.id, phrase]));
+    cachePhraseData(cacheCopy);
     hydrateRecentAndFavorites();
     render();
   } catch (error) {
@@ -1469,6 +1472,13 @@ function applySettings() {
 
 function saveSettings() {
   localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(state.settings));
+}
+
+function cachePhraseData(response) {
+  if (!("caches" in window) || !response || !response.ok) return;
+  caches.open(DATA_CACHE_NAME)
+    .then((cache) => cache.put("./phrases.json", response))
+    .catch(() => {});
 }
 
 function updateOnlineStatus() {

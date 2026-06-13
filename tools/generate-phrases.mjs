@@ -1701,6 +1701,6 @@ await writeFile(path.join(root, "phrases.json"), `${JSON.stringify({
   generatedAt: new Date().toISOString(),
   categories: categoryOrder,
   phrases,
-}, null, 2)}\n`);
+})}\n`);
 
 console.log(`Generated ${phrases.length} phrases across ${categoryOrder.length} categories.`);

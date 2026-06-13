@@ -1,10 +1,10 @@
-const CACHE_NAME = "japan-travel-phrase-pwa-v11";
+const CACHE_NAME = "japan-travel-phrase-pwa-v12";
+const DATA_CACHE_NAME = "japan-travel-phrase-pwa-data-v12";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
-  "./phrases.json",
   "./manifest.json",
   "./icons/icon.svg",
   "./icons/icon-192.png",
@@ -24,14 +24,9 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
       .then((keys) => {
-        const oldKeys = keys.filter((key) => key !== CACHE_NAME);
+        const oldKeys = keys.filter((key) => key !== CACHE_NAME && key !== DATA_CACHE_NAME);
         return Promise.all(oldKeys.map((key) => caches.delete(key)))
-          .then(() => self.clients.claim())
-          .then(() => {
-            if (!oldKeys.length) return undefined;
-            return self.clients.matchAll({ type: "window", includeUncontrolled: true })
-              .then((windows) => Promise.all(windows.map((client) => client.navigate(client.url))));
-          });
+          .then(() => self.clients.claim());
       })
   );
 });
@@ -39,6 +34,24 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET") return;
+
+  if (new URL(request.url).pathname.endsWith("/phrases.json")) {
+    event.respondWith(
+      caches.open(DATA_CACHE_NAME).then((cache) => (
+        cache.match(request).then((cached) => {
+          const fresh = fetch(request)
+            .then((response) => {
+              if (!response || response.status !== 200 || response.type === "opaque") return response;
+              cache.put(request, response.clone());
+              return response;
+            })
+            .catch(() => cached);
+          return cached || fresh;
+        })
+      ))
+    );
+    return;
+  }
 
   if (request.mode === "navigate") {
     event.respondWith(
