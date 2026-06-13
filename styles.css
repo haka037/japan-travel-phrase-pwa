@@ -299,6 +299,11 @@ main {
   box-shadow: 0 8px 22px rgba(24, 37, 31, 0.05);
 }
 
+.phrase-card.generated-card {
+  border-color: color-mix(in srgb, var(--teal) 48%, var(--line));
+  background: color-mix(in srgb, var(--teal) 7%, var(--surface));
+}
+
 .phrase-card header {
   display: flex;
   align-items: center;
@@ -366,6 +371,19 @@ main {
   border-color: color-mix(in srgb, var(--amber) 70%, var(--line));
   background: color-mix(in srgb, var(--amber) 11%, var(--surface));
   color: var(--amber);
+}
+
+.generated-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--teal) 48%, var(--line));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--teal) 12%, var(--surface));
+  color: var(--teal);
+  font-size: 0.82rem;
+  font-weight: 950;
 }
 
 .empty-state {

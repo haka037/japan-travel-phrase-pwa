@@ -40,6 +40,9 @@ const SEARCH_SUGGESTIONS = [
 
 const QUERY_ALIASES = new Map([
   ["되요", "돼요"],
+  ["도왜", "도와주세요"],
+  ["도와", "도와주세요"],
+  ["도웨", "도와주세요"],
   ["도와줘", "도와주세요"],
   ["도와 줘", "도와주세요"],
   ["살려", "도와주세요"],
@@ -65,11 +68,117 @@ const QUERY_ALIASES = new Map([
   ["아리가또", "감사합니다"],
 ]);
 
+const COMPOSER_TERMS = [
+  ["가장 가까운 역", "一番近い駅", "이치방 치카이 에키"],
+  ["택시 승강장", "タクシー乗り場", "타쿠시 노리바"],
+  ["버스 정류장", "バス停", "바스테이"],
+  ["코인 락커", "コインロッカー", "코인 록카"],
+  ["수하물 보관소", "荷物預かり所", "니모츠 아즈카리도코로"],
+  ["관광 안내소", "観光案内所", "칸코 안나이쇼"],
+  ["화장실", "トイレ", "토이레"],
+  ["지하철역", "地下鉄の駅", "치카테츠노 에키"],
+  ["매표소", "チケット売り場", "치켓토 우리바"],
+  ["편의점", "コンビニ", "콘비니"],
+  ["약국", "薬局", "약쿄쿠"],
+  ["병원", "病院", "뵤인"],
+  ["경찰서", "警察署", "케이사츠쇼"],
+  ["파출소", "交番", "코반"],
+  ["환전소", "両替所", "료가에쇼"],
+  ["쓰레기통", "ゴミ箱", "고미바코"],
+  ["출구", "出口", "데구치"],
+  ["입구", "入口", "이리구치"],
+  ["공항", "空港", "쿠코"],
+  ["하네다 공항", "羽田空港", "하네다 쿠코"],
+  ["나리타 공항", "成田空港", "나리타 쿠코"],
+  ["간사이 공항", "関西空港", "칸사이 쿠코"],
+  ["도쿄역", "東京駅", "도쿄 에키"],
+  ["신주쿠역", "新宿駅", "신주쿠 에키"],
+  ["시부야역", "渋谷駅", "시부야 에키"],
+  ["교토역", "京都駅", "교토 에키"],
+  ["오사카역", "大阪駅", "오사카 에키"],
+  ["난바역", "なんば駅", "난바 에키"],
+  ["호텔", "ホテル", "호테루"],
+  ["숙소", "宿泊先", "슈쿠하쿠사키"],
+  ["이 주소", "この住所", "코노 주소"],
+  ["여기", "ここ", "코코"],
+  ["물", "お水", "오미즈"],
+  ["따뜻한 물", "お湯", "오유"],
+  ["얼음물", "氷水", "코오리미즈"],
+  ["맥주", "ビール", "비루"],
+  ["커피", "コーヒー", "코히"],
+  ["아이스커피", "アイスコーヒー", "아이스 코히"],
+  ["메뉴판", "メニュー", "메뉴"],
+  ["계산서", "伝票", "덴표"],
+  ["영수증", "レシート", "레시토"],
+  ["젓가락", "お箸", "오하시"],
+  ["숟가락", "スプーン", "스푼"],
+  ["포크", "フォーク", "포쿠"],
+  ["앞접시", "取り皿", "토리자라"],
+  ["봉투", "袋", "후쿠로"],
+  ["우산", "傘", "카사"],
+  ["마스크", "マスク", "마스크"],
+  ["휴지", "ティッシュ", "팃슈"],
+  ["충전기", "充電器", "주덴키"],
+  ["충전 케이블", "充電ケーブル", "주덴 케부루"],
+  ["보조배터리", "モバイルバッテリー", "모바이루 밧테리"],
+  ["유심 카드", "SIMカード", "심 카도"],
+  ["교통카드", "交通系ICカード", "코츠케이 아이시 카도"],
+  ["감기약", "風邪薬", "카제구스리"],
+  ["두통약", "頭痛薬", "즈츠구스리"],
+  ["진통제", "痛み止め", "이타미도메"],
+  ["소화제", "胃薬", "이구스리"],
+  ["알레르기약", "アレルギーの薬", "아레루기노 쿠스리"],
+  ["돼지고기", "豚肉", "부타니쿠"],
+  ["소고기", "牛肉", "규니쿠"],
+  ["닭고기", "鶏肉", "토리니쿠"],
+  ["해산물", "魚介類", "교카이루이"],
+  ["새우", "エビ", "에비"],
+  ["게", "カニ", "카니"],
+  ["오징어", "イカ", "이카"],
+  ["생선", "魚", "사카나"],
+  ["조개", "貝", "카이"],
+  ["달걀", "卵", "타마고"],
+  ["우유", "牛乳", "규뉴"],
+  ["밀가루", "小麦", "코무기"],
+  ["메밀", "そば", "소바"],
+  ["땅콩", "ピーナッツ", "피나츠"],
+  ["견과류", "ナッツ", "낫츠"],
+  ["고수", "パクチー", "파쿠치"],
+  ["술", "アルコール", "아루코루"],
+  ["머리", "頭", "아타마"],
+  ["배", "お腹", "오나카"],
+  ["목", "喉", "노도"],
+  ["허리", "腰", "코시"],
+  ["가슴", "胸", "무네"],
+  ["다리", "足", "아시"],
+  ["팔", "腕", "우데"],
+  ["손", "手", "테"],
+  ["발", "足", "아시"],
+  ["이", "歯", "하"],
+  ["눈", "目", "메"],
+  ["귀", "耳", "미미"],
+  ["무릎", "膝", "히자"],
+  ["여권", "パスポート", "파스포토"],
+  ["지갑", "財布", "사이후"],
+  ["휴대폰", "スマホ", "스마호"],
+  ["카드", "カード", "카도"],
+  ["현금", "現金", "겐킨"],
+  ["가방", "バッグ", "박구"],
+  ["캐리어", "スーツケース", "스츠케스"],
+  ["숙소 키", "部屋の鍵", "헤야노 카기"],
+  ["카메라", "カメラ", "카메라"],
+  ["이어폰", "イヤホン", "이야혼"],
+  ["안경", "眼鏡", "메가네"],
+  ["약", "薬", "쿠스리"],
+  ["티켓", "チケット", "치켓토"],
+].map(([ko, ja, pronunciation]) => ({ ko, ja, pronunciation })).sort((a, b) => b.ko.length - a.ko.length);
+
 const state = {
   data: null,
   phrases: [],
   categories: [],
   phraseById: new Map(),
+  composedById: new Map(),
   query: "",
   selectedCategory: "",
   view: "home",
@@ -298,10 +407,11 @@ function render() {
 
 function renderMainSections() {
   const settings = state.view === "settings";
+  const searching = Boolean(state.query.trim()) && state.view === "home";
   els.settingsSection.classList.toggle("hidden", !settings);
-  els.quickSection.classList.toggle("hidden", settings || state.view === "favorites" || state.view === "recent");
-  els.categorySection.classList.toggle("hidden", settings || state.view === "favorites" || state.view === "recent");
-  els.savedSection.classList.toggle("hidden", settings || state.view === "favorites" || state.view === "recent");
+  els.quickSection.classList.toggle("hidden", settings || searching || state.view === "favorites" || state.view === "recent");
+  els.categorySection.classList.toggle("hidden", settings || searching || state.view === "favorites" || state.view === "recent");
+  els.savedSection.classList.toggle("hidden", settings || searching || state.view === "favorites" || state.view === "recent");
   els.resultsSection.classList.toggle("hidden", settings);
 }
 
@@ -355,6 +465,15 @@ function renderPhraseResults() {
     title = `"${state.query.trim()}" 검색 결과`;
     kicker = state.selectedCategory || "검색";
     phrases = searchPhrases(state.query, filteredByCategory());
+    const composed = composePhrase(state.query);
+    if (composed) {
+      state.composedById.set(composed.id, composed);
+      phrases = [
+        composed,
+        ...phrases.filter((phrase) => normalize(phrase.ko) !== normalize(composed.ko) && normalize(phrase.ja) !== normalize(composed.ja)),
+      ];
+      kicker = "검색 + 작문";
+    }
   } else if (state.selectedCategory) {
     title = state.selectedCategory;
     kicker = "카테고리";
@@ -374,6 +493,17 @@ function renderPhraseResults() {
 
   if (!phrases.length) {
     els.emptyState.classList.remove("hidden");
+    if (state.query.trim()) {
+      els.emptyState.innerHTML = `
+        <strong>바로 만들 수 있는 문장을 찾지 못했습니다.</strong>
+        <span>예: "화장실 어디", "충전기 있나요", "신주쿠역 가고 싶어요", "여권 잃어버렸어요"처럼 짧게 써 보세요.</span>
+      `;
+    } else {
+      els.emptyState.innerHTML = `
+        <strong>딱 맞는 문장을 찾지 못했습니다.</strong>
+        <span>검색어를 짧게 줄이거나 아래 긴급 문장을 먼저 사용해 보세요.</span>
+      `;
+    }
     const fallback = QUICK_PHRASES.slice(0, 8)
       .map((ko) => state.phrases.find((phrase) => phrase.ko === ko))
       .filter(Boolean);
@@ -387,13 +517,16 @@ function renderPhraseResults() {
 
 function renderPhraseCard(phrase) {
   const saved = state.favorites.has(phrase.id);
+  const generated = Boolean(phrase.isGenerated);
   return `
-    <article class="phrase-card" data-id="${phrase.id}">
+    <article class="phrase-card ${generated ? "generated-card" : ""}" data-id="${phrase.id}">
       <header>
         <span class="category-pill">${escapeHTML(phrase.category)}</span>
-        <button class="tool-button ${saved ? "saved" : ""}" type="button" data-action="favorite" data-id="${phrase.id}" aria-label="즐겨찾기">
-          <span aria-hidden="true">${saved ? "★" : "☆"}</span>
-        </button>
+        ${generated
+          ? `<span class="generated-pill">작문</span>`
+          : `<button class="tool-button ${saved ? "saved" : ""}" type="button" data-action="favorite" data-id="${phrase.id}" aria-label="즐겨찾기">
+              <span aria-hidden="true">${saved ? "★" : "☆"}</span>
+            </button>`}
       </header>
       <div class="phrase-ko">${escapeHTML(phrase.ko)}</div>
       <div class="phrase-ja" lang="ja">${escapeHTML(phrase.ja)}</div>
@@ -584,6 +717,249 @@ function categoryWeight(category) {
   return weights[category] ?? 10;
 }
 
+function composePhrase(query) {
+  const raw = query.trim();
+  const norm = normalize(raw);
+  const tight = compact(raw);
+  if (!norm || norm.length < 2) return null;
+
+  const matched = findComposerTerm(raw);
+  if (matched) {
+    const generated = composeWithTerm(raw, norm, tight, matched);
+    if (generated) return createComposedPhrase(raw, generated);
+  }
+
+  const direct = directComposition(norm, tight, raw);
+  if (direct) return direct;
+
+  const slot = fallbackComposerTerm(raw);
+  if (!slot) return null;
+
+  const generated = composeWithTerm(raw, norm, tight, slot);
+  return generated ? createComposedPhrase(raw, generated) : null;
+}
+
+function directComposition(norm, tight, raw) {
+  const directRows = [
+    [/도와|도왜|도웨|살려|help/, "도와주세요.", "助けてください。", "타스케테 쿠다사이", "긴급하게 도움을 요청하는 표현입니다."],
+    [/일본어.*못|일본말.*못|일본어.*초보/, "일본어를 잘 못합니다.", "日本語がよくできません。", "니혼고가 요쿠 데키마센", "일본어 초보임을 알리는 표현입니다."],
+    [/천천히.*말|천천히.*해/, "천천히 말해 주세요.", "ゆっくり話してください。", "윳쿠리 하나시테 쿠다사이", "상대가 빠르게 말할 때 씁니다."],
+    [/다시.*말|한번.*더|한 번.*더/, "다시 한 번 말해 주세요.", "もう一度言ってください。", "모 이치도 잇테 쿠다사이", "못 들었을 때 씁니다."],
+    [/한국어.*할|한국말.*할/, "한국어를 할 줄 아세요?", "韓国語は話せますか。", "캉코쿠고와 하나세마스카", "한국어 가능 여부를 물을 때 씁니다."],
+    [/영어.*할/, "영어를 할 줄 아세요?", "英語は話せますか。", "에이고와 하나세마스카", "영어 가능 여부를 물을 때 씁니다."],
+    [/카드.*(돼|되|가능|결제)/, "카드로 결제할 수 있나요?", "カードで払えますか。", "카도데 하라에마스카", "카드 결제 가능 여부를 물을 때 씁니다."],
+    [/현금.*(만|뿐)/, "현금만 되나요?", "現金だけですか。", "겐킨다케데스카", "현금 결제만 가능한지 물을 때 씁니다."],
+    [/예약/, "예약했습니다.", "予約しています。", "요야쿠 시테이마스", "예약을 확인할 때 씁니다."],
+    [/길.*잃|어디인지.*모르/, "길을 잃었습니다.", "道に迷いました。", "미치니 마요이마시타", "길을 잃었을 때 씁니다."],
+    [/맵지|안맵|안 맵/, "맵지 않게 해 주세요.", "辛くしないでください。", "카라쿠 시나이데 쿠다사이", "매운맛을 빼 달라고 할 때 씁니다."],
+    [/덜.*맵|조금.*맵/, "덜 맵게 해 주세요.", "辛さを控えめにしてください。", "카라사오 히카에메니 시테 쿠다사이", "매운맛을 줄여 달라고 할 때 씁니다."],
+    [/얼음.*빼|노.*아이스/, "얼음 빼 주세요.", "氷なしでお願いします。", "코오리 나시데 오네가이시마스", "음료에서 얼음을 빼 달라고 할 때 씁니다."],
+    [/포장|테이크아웃|가져갈/, "포장해 주세요.", "持ち帰りでお願いします。", "모치카에리데 오네가이시마스", "테이크아웃 요청입니다."],
+    [/계산/, "계산해 주세요.", "お会計をお願いします。", "오카이케이오 오네가이시마스", "식당에서 계산할 때 씁니다."],
+    [/사진.*찍|찍어.*주/, "사진 찍어 주실 수 있나요?", "写真を撮ってもらえますか。", "샤신오 톳테 모라에마스카", "사진을 부탁할 때 씁니다."],
+    [/와이파이.*(비번|비밀번호|패스워드)/, "와이파이 비밀번호를 알려 주세요.", "Wi-Fiのパスワードを教えてください。", "와이파이노 파스와도오 오시에테 쿠다사이", "와이파이 비밀번호를 물을 때 씁니다."],
+    [/충전.*(가능|되|돼)|충전할/, "충전할 수 있나요?", "充電できますか。", "주덴 데키마스카", "충전 가능 여부를 물을 때 씁니다."],
+    [/알레르기|알러지/, "알레르기가 있습니다.", "アレルギーがあります。", "아레루기 가 아리마스", "알레르기가 있음을 알릴 때 씁니다."],
+    [/병원.*가|병원.*싶/, "병원에 가고 싶습니다.", "病院に行きたいです。", "뵤인니 이키타이데스", "병원 이동이 필요할 때 씁니다."],
+    [/구급차|응급차|119/, "구급차를 불러 주세요.", "救急車を呼んでください。", "큐큐샤오 욘데 쿠다사이", "응급 상황에서 씁니다."],
+    [/경찰.*불|경찰.*불러/, "경찰을 불러 주세요.", "警察を呼んでください。", "케이사츠오 욘데 쿠다사이", "경찰 도움이 필요할 때 씁니다."],
+    [/화장실$|토이레/, "화장실은 어디에 있나요?", "トイレはどこですか。", "토이레와 도코데스카", "화장실 위치를 물을 때 씁니다."],
+    [/얼마|가격/, "이것은 얼마예요?", "これはいくらですか。", "코레와 이쿠라데스카", "가격을 물을 때 씁니다."],
+  ];
+
+  for (const [pattern, ko, ja, pronunciation, note] of directRows) {
+    if (pattern.test(norm) || pattern.test(tight)) {
+      return createComposedPhrase(raw, { ko, ja, pronunciation, note });
+    }
+  }
+  return null;
+}
+
+function composeWithTerm(raw, norm, tight, term) {
+  const ko = cleanupComposerKorean(raw);
+  if (/어디|위치|찾/.test(norm)) {
+    return {
+      ko: `${topic(term.ko)} 어디에 있나요?`,
+      ja: `${term.ja}はどこですか。`,
+      pronunciation: `${term.pronunciation}와 도코데스카`,
+      note: "입력한 단어를 장소 찾기 문장으로 만든 오프라인 작문입니다.",
+    };
+  }
+  if (/근처|주변/.test(norm) && /있|있나|있어/.test(norm)) {
+    return {
+      ko: `이 근처에 ${subject(term.ko)} 있나요?`,
+      ja: `この近くに${term.ja}はありますか。`,
+      pronunciation: `코노 치카쿠니 ${term.pronunciation}와 아리마스카`,
+      note: "주변에 있는지 물어보는 오프라인 작문입니다.",
+    };
+  }
+  if (/가고.*싶|가고싶|가야|갈래/.test(norm)) {
+    return {
+      ko: `${term.ko}에 가고 싶습니다.`,
+      ja: `${term.ja}に行きたいです。`,
+      pronunciation: `${term.pronunciation}니 이키타이데스`,
+      note: "목적지로 가고 싶다고 말하는 오프라인 작문입니다.",
+    };
+  }
+  if (/가.*주세요|가.*주세|가줘|까지.*가|데려/.test(norm)) {
+    return {
+      ko: `${term.ko}까지 가 주세요.`,
+      ja: `${term.ja}までお願いします。`,
+      pronunciation: `${term.pronunciation}마데 오네가이시마스`,
+      note: "택시나 이동 상황에서 쓰는 오프라인 작문입니다.",
+    };
+  }
+  if (/얼마|가격/.test(norm)) {
+    return {
+      ko: `${topic(term.ko)} 얼마예요?`,
+      ja: `${term.ja}はいくらですか。`,
+      pronunciation: `${term.pronunciation}와 이쿠라데스카`,
+      note: "가격을 물어보는 오프라인 작문입니다.",
+    };
+  }
+  if (/잃|분실|없어졌/.test(norm)) {
+    return {
+      ko: `${object(term.ko)} 잃어버렸습니다.`,
+      ja: `${term.ja}をなくしました。`,
+      pronunciation: `${term.pronunciation}오 나쿠시마시타`,
+      note: "분실 사실을 알리는 오프라인 작문입니다.",
+    };
+  }
+  if (/찾고|찾아/.test(norm)) {
+    return {
+      ko: `${object(term.ko)} 찾고 있습니다.`,
+      ja: `${term.ja}を探しています。`,
+      pronunciation: `${term.pronunciation}오 사가시테이마스`,
+      note: "잃어버린 물건을 찾을 때 쓰는 오프라인 작문입니다.",
+    };
+  }
+  if (/아파|아프|통증|痛/.test(norm)) {
+    return {
+      ko: `${subject(term.ko)} 아픕니다.`,
+      ja: `${term.ja}が痛いです。`,
+      pronunciation: `${term.pronunciation}가 이타이데스`,
+      note: "아픈 부위를 말하는 오프라인 작문입니다.",
+    };
+  }
+  if (/빼|없이|제외/.test(norm)) {
+    return {
+      ko: `${object(term.ko)} 빼 주세요.`,
+      ja: `${term.ja}を抜いてください。`,
+      pronunciation: `${term.pronunciation}오 누이테 쿠다사이`,
+      note: "재료를 빼 달라고 하는 오프라인 작문입니다.",
+    };
+  }
+  if (/못.*먹|먹을.*수.*없|안.*먹/.test(norm)) {
+    return {
+      ko: `저는 ${object(term.ko)} 먹을 수 없습니다.`,
+      ja: `${term.ja}は食べられません。`,
+      pronunciation: `${term.pronunciation}와 타베라레마센`,
+      note: "먹을 수 없는 재료를 알리는 오프라인 작문입니다.",
+    };
+  }
+  if (/알레르기|알러지/.test(norm)) {
+    return {
+      ko: `저는 ${term.ko} 알레르기가 있습니다.`,
+      ja: `${term.ja}アレルギーがあります。`,
+      pronunciation: `${term.pronunciation} 아레루기 가 아리마스`,
+      note: "알레르기를 알리는 오프라인 작문입니다.",
+    };
+  }
+  if (/작동.*안|안.*돼|안됨|고장/.test(norm)) {
+    return {
+      ko: `${subject(term.ko)} 작동하지 않습니다.`,
+      ja: `${term.ja}が使えません。`,
+      pronunciation: `${term.pronunciation}가 츠카에마센`,
+      note: "기기나 시설 문제가 있을 때 쓰는 오프라인 작문입니다.",
+    };
+  }
+  if (/있나|있어|있습|파나|살 수/.test(norm)) {
+    return {
+      ko: `${term.ko} 있나요?`,
+      ja: `${term.ja}はありますか。`,
+      pronunciation: `${term.pronunciation}와 아리마스카`,
+      note: "물건이나 시설이 있는지 물어보는 오프라인 작문입니다.",
+    };
+  }
+  if (/주세요|줘|부탁|주세/.test(norm)) {
+    return {
+      ko: `${term.ko} 주세요.`,
+      ja: `${term.ja}をください。`,
+      pronunciation: `${term.pronunciation}오 쿠다사이`,
+      note: "물건을 달라고 할 때 쓰는 오프라인 작문입니다.",
+    };
+  }
+
+  if (ko !== raw.trim() && ko.length >= 2) {
+    return null;
+  }
+  return null;
+}
+
+function createComposedPhrase(raw, phrase) {
+  return {
+    id: `compose_${hashString(`${raw}|${phrase.ja}`)}`,
+    category: "오프라인 작문",
+    ko: phrase.ko,
+    ja: phrase.ja,
+    pronunciation: phrase.pronunciation,
+    note: `${phrase.note} 자유 번역 AI가 아니라 앱 안의 여행 패턴으로 만든 문장입니다.`,
+    tags: ["작문", "오프라인", "자동"],
+    synonyms: [raw],
+    priority: 10,
+    isGenerated: true,
+  };
+}
+
+function findComposerTerm(input) {
+  const norm = normalize(input);
+  const tight = compact(input);
+  return COMPOSER_TERMS.find((term) => norm.includes(normalize(term.ko)) || tight.includes(compact(term.ko)));
+}
+
+function fallbackComposerTerm(input) {
+  const slot = cleanupComposerKorean(input);
+  if (!slot || slot.length < 2) return null;
+  return COMPOSER_TERMS.find((term) => normalize(term.ko) === normalize(slot) || compact(term.ko) === compact(slot));
+}
+
+function cleanupComposerKorean(input) {
+  return normalize(input)
+    .replace(/^(저는|제가|제|이|그|저|여기|거기|근처|주변|이 근처에|이 음식에)\s*/g, "")
+    .replace(/\s*(어디|위치|찾고 있습니다|찾고 있어요|찾아 주세요|있나요|있어요|있습니까|주세요|줘|부탁|가고 싶어요|가고 싶습니다|가주세요|가 주세요|까지|얼마|가격|잃어버렸어요|잃어버렸습니다|분실|아파요|아픕니다|빼 주세요|빼줘|없이|못 먹어요|먹을 수 없습니다|알레르기|알러지|작동하지 않습니다|안 돼요|안되요|고장)$/g, "")
+    .trim();
+}
+
+function hashString(value) {
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = ((hash << 5) - hash + value.charCodeAt(index)) | 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+function hasFinalConsonant(text) {
+  const chars = [...text.trim()];
+  for (let index = chars.length - 1; index >= 0; index -= 1) {
+    const code = chars[index].charCodeAt(0);
+    if (code >= 0xac00 && code <= 0xd7a3) return (code - 0xac00) % 28 !== 0;
+    if (/[A-Za-z0-9]/.test(chars[index])) return false;
+  }
+  return false;
+}
+
+function topic(text) {
+  return `${text}${hasFinalConsonant(text) ? "은" : "는"}`;
+}
+
+function subject(text) {
+  return `${text}${hasFinalConsonant(text) ? "이" : "가"}`;
+}
+
+function object(text) {
+  return `${text}${hasFinalConsonant(text) ? "을" : "를"}`;
+}
+
 function openDetail(phrase) {
   addRecent(phrase.id);
   const saved = state.favorites.has(phrase.id);
@@ -600,7 +976,7 @@ function openDetail(phrase) {
         <button class="tool-button" type="button" data-action="repeat" data-id="${phrase.id}"><span aria-hidden="true">↺</span><span>반복</span></button>
         <button class="tool-button accent" type="button" data-action="show" data-id="${phrase.id}"><span aria-hidden="true">⛶</span><span>크게</span></button>
         <button class="tool-button" type="button" data-action="copy" data-id="${phrase.id}"><span aria-hidden="true">⧉</span><span>복사</span></button>
-        <button class="tool-button ${saved ? "saved" : ""}" type="button" data-action="favorite" data-id="${phrase.id}"><span aria-hidden="true">${saved ? "★" : "☆"}</span><span>저장</span></button>
+        ${phrase.isGenerated ? "" : `<button class="tool-button ${saved ? "saved" : ""}" type="button" data-action="favorite" data-id="${phrase.id}"><span aria-hidden="true">${saved ? "★" : "☆"}</span><span>저장</span></button>`}
       </div>
     </div>
   `;
@@ -742,7 +1118,7 @@ function hydrateRecentAndFavorites() {
 }
 
 function getPhrase(id) {
-  return state.phraseById.get(id);
+  return state.phraseById.get(id) || state.composedById.get(id);
 }
 
 function applySettings() {

@@ -1,4 +1,4 @@
-const CACHE_NAME = "japan-travel-phrase-pwa-v7";
+const CACHE_NAME = "japan-travel-phrase-pwa-v9";
 const APP_SHELL = [
   "./",
   "./index.html",
