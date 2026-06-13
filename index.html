@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f8f5" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="일본 여행 회화" />
+    <title>일본 여행 회화</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">오프라인 PWA</p>
+          <h1>일본 여행 회화</h1>
+        </div>
+        <div class="status-stack" aria-live="polite">
+          <span id="offlineBadge" class="status-pill">준비 중</span>
+          <span id="phraseCount" class="count-pill">0문장</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="search-band" aria-label="문장 검색">
+          <label class="search-label" for="searchInput">한국어로 검색</label>
+          <div class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" inputmode="search" autocomplete="off" placeholder="예: 화장실, 카드 돼요, 덜 맵게, 약국" />
+            <button id="clearSearchButton" class="icon-button" type="button" aria-label="검색어 지우기">×</button>
+          </div>
+          <div id="suggestionRail" class="suggestion-rail" aria-label="빠른 검색어"></div>
+        </section>
+
+        <section id="quickSection" class="content-section" aria-labelledby="quickTitle">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">긴급/자주 씀</p>
+              <h2 id="quickTitle">바로 보여줄 문장</h2>
+            </div>
+          </div>
+          <div id="quickPhrases" class="quick-grid"></div>
+        </section>
+
+        <section id="categorySection" class="content-section" aria-labelledby="categoryTitle">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">상황별</p>
+              <h2 id="categoryTitle">카테고리</h2>
+            </div>
+            <button id="allCategoriesButton" class="text-button" type="button">전체</button>
+          </div>
+          <div id="categoryGrid" class="category-grid"></div>
+        </section>
+
+        <section id="resultsSection" class="content-section" aria-labelledby="resultsTitle">
+          <div class="section-heading">
+            <div>
+              <p id="resultsKicker" class="section-kicker">추천</p>
+              <h2 id="resultsTitle">여행 중 바로 쓰기</h2>
+            </div>
+            <button id="clearFilterButton" class="text-button hidden" type="button">필터 해제</button>
+          </div>
+          <div id="emptyState" class="empty-state hidden">
+            <strong>딱 맞는 문장을 찾지 못했습니다.</strong>
+            <span>검색어를 짧게 줄이거나 아래 긴급 문장을 먼저 사용해 보세요.</span>
+          </div>
+          <div id="phraseList" class="phrase-list"></div>
+        </section>
+
+        <section id="savedSection" class="content-section split-section" aria-label="저장한 문장과 최근 사용">
+          <div>
+            <div class="section-heading compact">
+              <div>
+                <p class="section-kicker">즐겨찾기</p>
+                <h2>저장한 문장</h2>
+              </div>
+            </div>
+            <div id="favoritePreview" class="mini-list"></div>
+          </div>
+          <div>
+            <div class="section-heading compact">
+              <div>
+                <p class="section-kicker">최근 사용</p>
+                <h2>다시 쓰기</h2>
+              </div>
+            </div>
+            <div id="recentPreview" class="mini-list"></div>
+          </div>
+        </section>
+
+        <section id="settingsSection" class="content-section hidden" aria-labelledby="settingsTitle">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">설정</p>
+              <h2 id="settingsTitle">출국 전 확인</h2>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <label class="setting-row">
+              <span>TTS 기본 속도</span>
+              <select id="rateSelect">
+                <option value="0.75">느리게</option>
+                <option value="1">보통</option>
+                <option value="1.15">빠르게</option>
+              </select>
+            </label>
+            <label class="setting-row">
+              <span>글자 크기</span>
+              <select id="fontScaleSelect">
+                <option value="1">보통</option>
+                <option value="1.1">크게</option>
+                <option value="1.22">아주 크게</option>
+              </select>
+            </label>
+            <label class="setting-row switch-row">
+              <span>다크모드</span>
+              <input id="darkModeToggle" type="checkbox" />
+            </label>
+            <div class="checklist">
+              <strong>출국 전 체크</strong>
+              <span>홈 화면에 추가했는지 확인</span>
+              <span>비행기 모드에서 검색되는지 확인</span>
+              <span>일본어 TTS가 재생되는지 확인</span>
+              <span>자주 쓸 문장을 즐겨찾기에 저장</span>
+            </div>
+            <div class="setting-actions">
+              <button id="resetDataButton" class="danger-button" type="button">저장 데이터 초기화</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="주요 메뉴">
+        <button class="nav-button active" data-view="home" type="button"><span aria-hidden="true">⌂</span><span>홈</span></button>
+        <button class="nav-button" data-view="favorites" type="button"><span aria-hidden="true">☆</span><span>즐겨찾기</span></button>
+        <button class="nav-button" data-view="recent" type="button"><span aria-hidden="true">↺</span><span>최근</span></button>
+        <button class="nav-button" data-view="settings" type="button"><span aria-hidden="true">⚙</span><span>설정</span></button>
+      </nav>
+    </div>
+
+    <dialog id="detailDialog" class="phrase-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="close" aria-label="닫기">×</button>
+      </form>
+      <div id="detailContent"></div>
+    </dialog>
+
+    <dialog id="showDialog" class="show-dialog">
+      <form method="dialog">
+        <button class="dialog-close light" value="close" aria-label="닫기">×</button>
+      </form>
+      <div id="showContent" class="show-content"></div>
+    </dialog>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
